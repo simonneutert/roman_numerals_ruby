@@ -1,40 +1,42 @@
 class Integer
   def to_roman
+    # 1993.to_roman
+    # target == ["1000", "900", "90", "3"]
+    # => ["M", "CM", "XC", "III"].join => "MCMXCIII"
     target = []
-    self.to_s.split("").reverse.each_with_index { |e, i| target << e + "0" * i }
-    target.reverse!
-    # for 2193.to_roman
-    # target == ["2000", "100", "90", "3"]
-    return target.map { |e| calc(e) }.join
+    to_s.split('').reverse.each_with_index { |e, i| target << e + '0' * i }
+    target.reverse.map { |e| roman_string(e) }.join
   end
 
   private
-  def calc(num)
-    n, num = num[0].to_i, num.to_i
+
+  def roman_string(number_in)
+    num = number_in[0].to_i
+    number = number_in.to_i
     # set boundaries for roman counting
     lower, middle, upper =
-        if num >= 1000
-          ["M", "M", "M"]
-        elsif num >= 100
-          ["C", "D", "M"]
-        elsif num >= 10
-          ["X", "L", "C"]
-        else
-          ["I", "V", "X"]
-        end
+      if number >= 1000
+        %w[M M M]
+      elsif number >= 100
+        %w[C D M]
+      elsif number >= 10
+        %w[X L C]
+      else
+        %w[I V X]
+      end
 
-    res = ""
-    if n >= 5
-      res << middle
-      res << lower * (n % 5) if n % 5 > 0
+    roman_string = ''
+    if num >= 5
+      roman_string << middle
+      roman_string << lower * (num % 5) if num % 5 > 0
     else
-      res << lower * n
+      roman_string << lower * num
     end
 
     # computationally substitues:
     # "IIII" with "IV" and "VIIII" with "IX", etc.
-    res.gsub!(middle + lower * 4, lower + upper)
-    res.gsub!(lower * 4, lower + middle)
-    return res
+    roman_string.gsub!(middle + lower * 4, lower + upper)
+    roman_string.gsub!(lower * 4, lower + middle)
+    roman_string
   end
 end
